@@ -1,8 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
 
 :root {
-  --primary: #F5A623;
-  --primary-dark: #D4891E;
+  --primary: #4FC3F7;
+  --primary-dark: #29B6F6;
   --bg-color: #121212;
   --surface-color: rgba(30, 30, 30, 0.6);
   --surface-border: rgba(255, 255, 255, 0.1);
@@ -29,8 +29,8 @@ body {
   display: flex;
   flex-direction: column;
   background-image: 
-    radial-gradient(circle at 15% 50%, rgba(245, 166, 35, 0.08), transparent 25%),
-    radial-gradient(circle at 85% 30%, rgba(212, 137, 30, 0.08), transparent 25%);
+    radial-gradient(circle at 15% 50%, rgba(79, 195, 247, 0.08), transparent 25%),
+    radial-gradient(circle at 85% 30%, rgba(41, 182, 246, 0.08), transparent 25%);
   background-attachment: fixed;
 }
 
@@ -109,7 +109,7 @@ input, select {
 
 input:focus, select:focus {
   border-color: var(--primary);
-  box-shadow: 0 0 0 2px rgba(245, 166, 35, 0.2);
+  box-shadow: 0 0 0 2px rgba(79, 195, 247, 0.2);
 }
 
 /* Password Visibility Toggle */
@@ -270,7 +270,7 @@ header {
 .btn-minus { background: rgba(231, 76, 60, 0.1); color: var(--danger); }
 .btn-minus:hover { background: var(--danger); color: white; }
 
-.btn-plus { background: rgba(245, 166, 35, 0.1); color: var(--primary); }
+.btn-plus { background: rgba(79, 195, 247, 0.1); color: var(--primary); }
 .btn-plus:hover { background: var(--primary); color: #111; }
 
 .count-display {
