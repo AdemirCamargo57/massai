@@ -1,12 +1,11 @@
-const CACHE_NAME = 'sapucaia-cache-v1';
+const CACHE_NAME = 'massai-cache-v1';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
   './styles.css',
   './app.js',
   './manifest.json',
-  './icon_192x192.png',
-  './icon.png',
+  './massai_logo_192x192.png',
   'https://www.gstatic.com/firebasejs/10.9.0/firebase-app-compat.js',
   'https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore-compat.js',
   'https://www.gstatic.com/firebasejs/10.9.0/firebase-storage-compat.js',

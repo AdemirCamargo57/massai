@@ -1,10 +1,14 @@
+// ============================================================================
+// FIREBASE — Instância do Antônio Mendes Camargo (Massai)
+// Projeto Firebase dedicado: massai-gado-2026 (dados isolados de outras instâncias).
+// ============================================================================
 const firebaseConfig = {
-  apiKey: "AIzaSyAAEnhVKuq8DlYbksSWUApujmhmfZ02Xb4",
-  authDomain: "sapucaia-gado-2026.firebaseapp.com",
-  projectId: "sapucaia-gado-2026",
-  storageBucket: "sapucaia-gado-2026.firebasestorage.app",
-  messagingSenderId: "738874315348",
-  appId: "1:738874315348:web:b5b539c57dee2e7cbdd3c1"
+  apiKey: "AIzaSyCqZ3fIg8Z9L1rFDNwOsEC7183LdFYOO2U",
+  authDomain: "massai-gado-2026.firebaseapp.com",
+  projectId: "massai-gado-2026",
+  storageBucket: "massai-gado-2026.firebasestorage.app",
+  messagingSenderId: "411432527046",
+  appId: "1:411432527046:web:bcd5e0a35fc9739e9a63c7"
 };
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
@@ -1382,7 +1386,7 @@ const app = {
       const blob = new Blob([dataStr], { type: "application/json" });
       const url = URL.createObjectURL(blob);
       const dateStr = new Date().toISOString().replace(/T/, '_').replace(/\..+/, '').replace(/:/g, '-');
-      const filename = `sapucaia_backup_${dateStr}.json`;
+      const filename = `massai_backup_${dateStr}.json`;
       
       const a = document.createElement('a');
       a.href = url;

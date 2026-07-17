@@ -1,6 +1,8 @@
-# Sapucaia - Gestão de Gado
+# Massai - Gestão de Gado
 
-A lightweight, robust Progressive Web App (PWA) for managing cattle and pastures on the farm. Sapucaia is built for field conditions, offering full offline capabilities so employees can record cattle counts, pasture conditions, and photos even without an internet connection.
+A lightweight, robust Progressive Web App (PWA) for managing cattle and pastures on the farm. Massai is built for field conditions, offering full offline capabilities so employees can record cattle counts, pasture conditions, and photos even without an internet connection.
+
+> Instance owner: **Antônio Mendes Camargo**. This app runs against its own dedicated Firebase project so its data is fully separate from any other instance.
 
 ## 🚀 Key Features
 
@@ -39,8 +41,8 @@ To run this project, you will need:
 
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/your-username/sapucaia.git
-   cd sapucaia
+   git clone https://github.com/your-username/massai.git
+   cd massai
    ```
 
 2. **Configure Firebase:**
@@ -57,7 +59,7 @@ To run this project, you will need:
    ```
 
 3. **PWA Icons:**
-   The app ships with `icon.png` (512×512) and `icon_192x192.png` (192×192) in the project root, referenced by `manifest.json`. Replace these with your own to customize the "Add to Home Screen" icon.
+   The app ships with `massai_logo_192x192.png` (192×192) in the project root, referenced by `manifest.json`. Replace it with your own to customize the "Add to Home Screen" icon.
 
 4. **Run the Application:**
    Start a local web server in the project directory. For example, using Node.js `npx`:
@@ -68,10 +70,10 @@ To run this project, you will need:
 
 ## 🔄 PWA Updates & Caching
 
-Because Sapucaia is a Progressive Web App, it aggressively caches assets to allow offline usage in the field. When you push new code updates to your hosting provider, the changes might not immediately appear in the browser.
+Because Massai is a Progressive Web App, it aggressively caches assets to allow offline usage in the field. When you push new code updates to your hosting provider, the changes might not immediately appear in the browser.
 
 To ensure your users always get the latest version, before deploying:
-1. **Update `sw.js`:** Bump the `CACHE_NAME` constant (e.g. from `sapucaia-cache-v1` to `sapucaia-cache-v2`). The Service Worker automatically deletes old cache versions when a new version is detected.
+1. **Update `sw.js`:** Bump the `CACHE_NAME` constant (e.g. from `massai-cache-v1` to `massai-cache-v2`). The Service Worker automatically deletes old cache versions when a new version is detected.
 2. **Update the version badge:** Bump the visible version badge (e.g. `v14`) in `index.html` so the deployed version is identifiable on-device.
 3. **In-app refresh:** Users can force the latest version via the **🔄 Atualizar** menu item, which unregisters the Service Worker, clears all caches, and reloads.
 4. **Hard Refresh:** When testing a deployment, a hard refresh (`Ctrl + F5` / `Cmd + Shift + R`) forces the browser to fetch the new Service Worker from the network.
@@ -87,7 +89,7 @@ Zip and send the following files to the new farm owner:
 * `app.js`
 * `manifest.json`
 * `sw.js`
-* `icon.png` and `icon_192x192.png`
+* `massai_logo_192x192.png`
 
 ### 2. Set Up a Firebase Backend
 They will need their own Firebase project to store data and pasture photos:
