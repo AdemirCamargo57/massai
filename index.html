@@ -1,0 +1,301 @@
+<!DOCTYPE crossed>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Sapucaia - Gestão de Gado</title>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#F5A623">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="icon" type="image/png" href="icon_192x192.png">
+  <link rel="apple-touch-icon" href="icon_192x192.png">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="app">
+    
+    <!-- TELA DE LOGIN -->
+    <div id="login-view" class="glass-card hidden">
+      <div class="text-center mb-4">
+        <h1 class="mb-1">Sapucaia</h1>
+        <p>Acesse o sistema com sua senha</p>
+      </div>
+      
+      <button id="btn-install-app" class="btn btn-secondary mb-4 hidden" style="background: rgba(245, 166, 35, 0.2); color: var(--primary); border: 1px solid var(--primary);">📲 Instalar Aplicativo no Celular</button>
+
+      <form id="login-form">
+        <div class="form-group">
+          <label for="password">Senha de Acesso</label>
+          <div class="password-wrapper">
+            <input type="password" id="password" placeholder="Digite sua senha..." required>
+            <button type="button" id="btn-toggle-password" class="btn-toggle-password" title="Mostrar/Ocultar Senha">👁️</button>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Entrar no Sistema</button>
+      </form>
+      <p id="login-error" class="text-center mt-4 hidden" style="color: var(--danger);"></p>
+    </div>
+
+    <!-- DASHBOARD ADMIN -->
+    <div id="admin-view" class="hidden">
+      <header>
+        <div>
+          <div style="display: flex; align-items: center; gap: 0.5rem;">
+            <h2 style="margin: 0;">Painel Admin</h2>
+            <span class="app-version-badge">v14</span>
+          </div>
+          <p>Visão Global das Fazendas</p>
+        </div>
+        <div class="header-menu-wrapper">
+          <button class="btn btn-secondary header-menu-toggle" onclick="toggleHeaderMenu('admin-menu')" aria-label="Menu">☰ Menu</button>
+          <div id="admin-menu" class="header-dropdown hidden">
+            <button class="header-menu-item btn-force-update" onclick="app.forceAppUpdate(); closeHeaderMenu('admin-menu')">🔄 Atualizar</button>
+            <button class="header-menu-item" onclick="app.changeMyPassword(); closeHeaderMenu('admin-menu')">🔑 Alterar Senha</button>
+            <button class="header-menu-item" onclick="app.showReport(); closeHeaderMenu('admin-menu')">📊 Relatório</button>
+            <button class="header-menu-item header-menu-item--danger" onclick="app.logout()">🚪 Sair</button>
+          </div>
+        </div>
+      </header>
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <h3 id="admin-total-gado">0</h3>
+          <p>Cabeças de Gado</p>
+        </div>
+        <div class="stat-card">
+          <h3 id="admin-total-fazendas">0</h3>
+          <p>Fazendas</p>
+        </div>
+      </div>
+
+      <div class="glass-card mb-4">
+        <h3 class="mb-3">Resumo por Fazenda</h3>
+        <div id="admin-farms-list" class="category-list">
+          <!-- Injetado via JS -->
+        </div>
+      </div>
+
+      <div class="glass-card mb-4">
+        <h3 class="mb-3">Acesso dos Parceiros</h3>
+        <form id="add-parceiro-form" class="mb-4">
+          <div class="form-group mb-2">
+            <input type="text" id="new-parceiro-name" placeholder="Nome do Parceiro (ex: João Silva)" required>
+          </div>
+          <div class="form-group mb-2">
+            <input type="text" id="new-parceiro-password" placeholder="Senha de Acesso (ex: 1234)" required>
+          </div>
+          <div class="form-group mb-2">
+            <label class="mb-1" style="display:block; font-weight:500;">Vincular às Fazendas:</label>
+            <div id="new-parceiro-farms" style="display:flex; flex-direction:column; gap:0.5rem;">
+              <!-- Checkboxes injetados via JS -->
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary" style="padding: 0.75rem;">Cadastrar Parceiro</button>
+        </form>
+        <div id="admin-parceiros-list" class="category-list">
+          <!-- Injetado via JS -->
+        </div>
+      </div>
+
+      <!-- NOVA SESSÃO: GERENCIAR FAZENDAS E PASTOS -->
+      <div class="glass-card mb-4">
+        <h3 class="mb-3">Gerenciar Fazendas e Pastos</h3>
+        <form id="add-farm-form" class="mb-4">
+          <div class="form-group mb-2">
+            <input type="text" id="new-farm-name" placeholder="Nome da Nova Fazenda" required>
+          </div>
+          <button type="submit" class="btn btn-primary" style="padding: 0.75rem;">Adicionar Fazenda</button>
+        </form>
+        <div id="admin-farms-management-list" class="category-list">
+          <!-- Injetado via JS -->
+        </div>
+      </div>
+
+      <!-- NOVA SESSÃO: BACKUP E RESTAURAÇÃO -->
+      <div class="glass-card mb-4">
+        <h3 class="mb-3">Backup e Restauração de Dados</h3>
+        <p class="mb-3" style="font-size: 0.9rem; color: var(--text-secondary);">Gerencie backups locais ou armazene cópias de segurança diretamente na nuvem.</p>
+        
+        <!-- Backups Locais -->
+        <div class="mb-4" style="padding-bottom: 1rem; border-bottom: 1px solid var(--surface-border);">
+          <h4 class="mb-2" style="font-size: 1rem; color: var(--primary);">Backups em Arquivo (Local)</h4>
+          <div style="display: flex; gap: 0.5rem;">
+            <button class="btn btn-secondary" onclick="app.exportBackup()" style="padding: 0.5rem 1rem; font-size: 0.9rem; flex: 1;">
+              📥 Exportar JSON
+            </button>
+            <button class="btn btn-secondary" onclick="document.getElementById('backup-file-input').click()" style="padding: 0.5rem 1rem; font-size: 0.9rem; flex: 1;">
+              📤 Importar JSON
+            </button>
+            <input type="file" id="backup-file-input" accept=".json" style="display: none;" onchange="app.importBackup(event)">
+          </div>
+        </div>
+
+        <!-- Backups em Nuvem -->
+        <div>
+          <h4 class="mb-2" style="font-size: 1rem; color: var(--primary);">Backups na Nuvem (Firestore)</h4>
+          <button class="btn btn-primary mb-3" onclick="app.createCloudBackup()" style="padding: 0.5rem 1rem; font-size: 0.9rem; width: auto;">
+            ☁️ Criar Backup na Nuvem
+          </button>
+          
+          <h5 class="mb-2" style="font-size: 0.9rem; color: var(--text-secondary); font-weight: 500;">Backups Recentes (Nuvem)</h5>
+          <div id="admin-backups-list" class="category-list">
+            <!-- Injetado via JS -->
+            <p class="text-center" style="font-size:0.9rem; color:var(--text-secondary); padding: 1rem 0;">Buscando backups...</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DASHBOARD PARCEIRO (CAMPO) -->
+    <div id="parceiro-view" class="hidden">
+      <header style="flex-direction: column; align-items: flex-start; gap: 1rem;">
+        <div>
+          <div style="display: flex; align-items: center; gap: 0.5rem;">
+            <h2 id="parceiro-name" style="font-size: calc(1.5rem - 2pt); margin: 0;">Parceiro</h2>
+            <span class="app-version-badge">v14</span>
+          </div>
+          <p>Registro de campo</p>
+        </div>
+        <div class="header-menu-wrapper">
+          <button class="btn btn-secondary header-menu-toggle" onclick="toggleHeaderMenu('parceiro-menu')" aria-label="Menu">☰ Menu</button>
+          <div id="parceiro-menu" class="header-dropdown hidden">
+            <button class="header-menu-item btn-force-update" onclick="app.forceAppUpdate(); closeHeaderMenu('parceiro-menu')">🔄 Atualizar</button>
+            <button class="header-menu-item" onclick="app.changeMyPassword(); closeHeaderMenu('parceiro-menu')">🔑 Alterar Senha</button>
+            <button class="header-menu-item" onclick="app.showReport(); closeHeaderMenu('parceiro-menu')">📊 Relatório</button>
+            <button class="header-menu-item header-menu-item--danger" onclick="app.logout()">🚪 Sair</button>
+          </div>
+        </div>
+      </header>
+
+      <!-- Seleção de Contexto -->
+      <div id="parceiro-context-selection" class="glass-card mb-4">
+        <h3 class="mb-3">Selecione o Local</h3>
+        <div class="form-group">
+          <label for="select-farm">Fazenda</label>
+          <select id="select-farm">
+            <option value="">Selecione a Fazenda...</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="select-pasture">Pasto</label>
+          <select id="select-pasture" disabled>
+            <option value="">Primeiro selecione a fazenda...</option>
+          </select>
+        </div>
+        <button id="btn-load-pasture" class="btn btn-primary" disabled>Carregar Animais</button>
+      </div>
+
+      <!-- Contadores do Pasto (Oculto até selecionar) -->
+      <div id="parceiro-counters" class="glass-card hidden">
+        <div class="mb-3">
+          <h3 id="current-pasture-name">Pasto Selecionado</h3>
+          <p>Atualize a quantidade de animais neste pasto.</p>
+        </div>
+        <div id="categories-container" class="category-list mb-4">
+          <!-- Injetado via JS -->
+        </div>
+
+        <div class="mb-3">
+          <h4 class="mb-2">Observações:</h4>
+          <textarea id="pasture-notes" rows="3" placeholder="O que precisa ser feito neste pasto?" style="width: 100%; padding: 1rem; border-radius: 8px; background: rgba(0,0,0,0.2); border: 1px solid var(--surface-border); color: var(--text-primary); margin-bottom: 1rem; font-family: inherit;" onchange="app.savePastureDetails()"></textarea>
+          
+          <div style="display:flex; gap:0.5rem;">
+            <label class="btn btn-secondary mb-2" style="cursor:pointer; display:flex; justify-content:center; flex: 1;">
+              <span>📷 Tirar Foto</span>
+              <input type="file" id="pasture-photo-capture" accept="image/*" capture="environment" style="display:none;" onchange="app.handlePhotoUpload(event)">
+            </label>
+            <label class="btn btn-secondary mb-2" style="cursor:pointer; display:flex; justify-content:center; flex: 1;">
+              <span>📁 Galeria</span>
+              <input type="file" id="pasture-photo-upload" accept="image/*" style="display:none;" onchange="app.handlePhotoUpload(event)">
+            </label>
+          </div>
+          <div id="pasture-photos-container" style="display:flex; gap:0.5rem; flex-wrap:wrap; margin-top: 1rem;">
+            <!-- Fotos via JS -->
+          </div>
+        </div>
+
+        <button class="btn btn-secondary mt-4" onclick="app.resetParceiroContext()">Voltar</button>
+      </div>
+    </div>
+
+    <!-- DASHBOARD REPORT -->
+    <div id="report-view" class="hidden">
+      <header style="flex-direction: column; align-items: flex-start; gap: 1rem;">
+        <div>
+          <h2>Relatório Completo</h2>
+          <p>Distribuição e Observações</p>
+        </div>
+        <div style="display:flex; gap:0.5rem; flex-wrap: wrap;">
+          <button class="btn btn-primary" style="width: auto; padding: 0.5rem 1rem;" onclick="window.print()">Salvar PDF / Imprimir</button>
+          <button class="btn btn-secondary" style="width: auto; padding: 0.5rem 1rem;" onclick="app.routeUser()">Voltar</button>
+        </div>
+      </header>
+      
+      <div id="report-content">
+        <!-- Injetado via JS -->
+      </div>
+    </div>
+
+    <!-- TELA HISTÓRICO DE MOVIMENTAÇÃO -->
+    <div id="history-view" class="hidden">
+      <header>
+        <div>
+          <h2>Histórico</h2>
+          <p id="history-view-title">Movimentações do Pasto</p>
+        </div>
+        <div style="display:flex; gap:0.5rem;">
+          <button id="btn-clear-history" class="btn hidden" style="width: auto; padding: 0.5rem 1rem; background: var(--danger); color: white; border: none;">Limpar Histórico</button>
+          <button class="btn btn-secondary" style="width: auto; padding: 0.5rem 1rem;" onclick="app.closePastureHistory()">Voltar</button>
+        </div>
+      </header>
+
+      <div id="history-view-content" class="category-list">
+        <!-- Injetado via JS -->
+      </div>
+    </div>
+
+    <!-- MODAL DE VISUALIZAÇÃO DE FOTO -->
+    <div id="photo-modal" class="hidden" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:9999; display:flex; justify-content:center; align-items:center; flex-direction:column;">
+      <button class="btn btn-secondary" style="position:absolute; top:20px; right:20px; z-index:10000; width:auto; padding:0.5rem 1rem;" onclick="app.closePhotoModal()">Fechar</button>
+      <img id="photo-modal-img" src="" style="max-width:95%; max-height:95%; object-fit:contain; border-radius:8px;">
+    </div>
+
+  </div>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-storage-compat.js"></script>
+  <script src="app.js"></script>
+  
+  <!-- Register Service Worker -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js')
+          .then(reg => console.log('Service Worker Registrado!', reg))
+          .catch(err => console.error('Erro no Service Worker', err));
+      });
+    }
+  </script>
+
+  <!-- Header dropdown menu -->
+  <script>
+    function toggleHeaderMenu(id) {
+      const menu = document.getElementById(id);
+      const isOpen = !menu.classList.contains('hidden');
+      document.querySelectorAll('.header-dropdown').forEach(m => m.classList.add('hidden'));
+      if (!isOpen) menu.classList.remove('hidden');
+    }
+    function closeHeaderMenu(id) {
+      document.getElementById(id).classList.add('hidden');
+    }
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.header-menu-wrapper')) {
+        document.querySelectorAll('.header-dropdown').forEach(m => m.classList.add('hidden'));
+      }
+    });
+  </script>
+</body>
+</html>
